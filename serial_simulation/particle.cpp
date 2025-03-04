@@ -31,9 +31,18 @@ void Particle::updatePos(double dt)
     }
 }
 
-void Particle::updateVel(double inflM, double *inflPos)
+void Particle::updateVel(double inflM, double *inflPos, double dt)
 {
-    
+    double x = inflPos[0] - pos[0];
+    double y = inflPos[1] - pos[1];
+    double z = inflPos[2] - pos[2];
+    double r = sqrt(x * x + y * y + z * z);
+    double sigma = getSigma(inflM);
+    double epsilon = getEpsilon(inflM);
+    double f = -24.0 * epsilon * (2.0 * pow(sigma, 12.0) / pow(r, 14.0) - pow(sigma, 6.0) / pow(r, 8.0));
+    vel[0] += x * f * dt;
+    vel[1] += y * f * dt;
+    vel[2] += z * f * dt;
 }
 
 double Particle::getSigma(double inflM)
